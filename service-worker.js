@@ -1,4 +1,4 @@
-const CACHE_NAME = "myedenred-v2";
+const CACHE_NAME = "myedenred-v3";
 const APP_FILES = [
   "./",
   "./index.html",
