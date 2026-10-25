@@ -32,7 +32,9 @@
       position: fixed;
       inset: 0;
       width: 100%;
-      height: calc(100% + env(safe-area-inset-top));
+      height: calc(
+        100% + env(safe-area-inset-top) + env(safe-area-inset-bottom)
+      );
       object-fit: fill;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
