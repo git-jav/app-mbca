@@ -1,4 +1,4 @@
-const CACHE_NAME = "myedenred-v1";
+const CACHE_NAME = "myedenred-v2";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -35,8 +35,14 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) =>
-      cachedResponse || fetch(event.request)
-    )
+    fetch(event.request)
+      .then((networkResponse) => {
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
