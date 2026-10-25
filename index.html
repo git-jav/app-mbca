@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#ea3f41">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,32 +17,42 @@
 
     html,
     body {
+      position: fixed;
+      inset: 0;
       width: 100%;
       height: 100%;
       min-height: 100dvh;
       margin: 0;
       overflow: hidden;
+      overscroll-behavior: none;
       background: #ea3f41;
+      touch-action: none;
     }
 
     img {
       position: fixed;
       inset: 0;
-      width: 100%;
+      width: 100vw;
       height: 100dvh;
-      object-fit: cover;
+      object-fit: fill;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-drag: none;
       user-select: none;
     }
   </style>
 </head>
 <body>
-  <img id="picture" src="image.png" alt="MyEdenred welcome screen">
+  <img id="picture" src="image.png" alt="MyEdenred welcome screen" draggable="false">
   <audio id="sound" src="crop.mp3" preload="auto"></audio>
   <script>
     const picture = document.getElementById("picture");
     const sound = document.getElementById("sound");
+
+    picture.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+    });
 
     picture.addEventListener("click", () => {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
