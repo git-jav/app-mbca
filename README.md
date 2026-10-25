@@ -15,6 +15,16 @@ On iPhone, open the hosted site in Safari and choose Share > Add to Home Screen.
 The translucent status bar allows the artwork to extend behind it; iOS controls
 the status-bar icon color.
 
-After deploying an update, open the app online to refresh its offline cache,
-then close and reopen it. If iOS retains old installation settings, remove the
-Home Screen app and add it again.
+The service worker bypasses the browser HTTP cache for online requests and
+keeps successful responses for offline use. Installation also bypasses the HTTP
+cache. The app checks for worker updates on load, when returning to the
+foreground, and when reconnecting, then reloads once when a new worker takes
+control.
+
+For each release, increment the cache version in `service-worker.js` and keep
+the image/audio `?v=` URLs in `index.html` and `APP_FILES` in sync. Deploy these
+files together. An already installed older app may need to be closed completely
+and reopened online once to receive this update behavior. If the server or CDN
+still serves old files, refresh its deployment/cache too; client code cannot
+invalidate a server-side cache. If iOS retains old installation settings, remove
+the Home Screen app and add it again.

@@ -48,8 +48,8 @@
   </style>
 </head>
 <body>
-  <img id="picture" src="image.png" alt="MyEdenred welcome screen" draggable="false">
-  <audio id="sound" src="crop.mp3" preload="auto"></audio>
+  <img id="picture" src="image.png?v=10" alt="MyEdenred welcome screen" draggable="false">
+  <audio id="sound" src="crop.mp3?v=10" preload="auto"></audio>
   <script>
     const picture = document.getElementById("picture");
     const sound = document.getElementById("sound");
@@ -91,8 +91,35 @@
     });
 
     if ("serviceWorker" in navigator) {
+      let reloading = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (!reloading) {
+          reloading = true;
+          window.location.reload();
+        }
+      });
+
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+        navigator.serviceWorker.register("./service-worker.js", {
+          updateViaCache: "none"
+        }).then((registration) => {
+          function checkForUpdate() {
+            if (navigator.onLine) {
+              registration.update().catch((error) => {
+                console.error("Unable to update the service worker:", error);
+              });
+            }
+          }
+
+          checkForUpdate();
+          window.addEventListener("online", checkForUpdate);
+          window.addEventListener("pageshow", checkForUpdate);
+          document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+              checkForUpdate();
+            }
+          });
+        }).catch((error) => {
           console.error("Unable to register the service worker:", error);
         });
       });
